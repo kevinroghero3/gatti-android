@@ -30,7 +30,28 @@ android {
     }
 }
 
+// Alcune librerie AndroidX trascinano vecchi kotlin-stdlib-jdk7/jdk8 (1.6.x) che
+// duplicano le classi di kotlin-stdlib 1.8+: qui allineo tutto a una sola versione.
+configurations.configureEach {
+    resolutionStrategy {
+        eachDependency { details ->
+            if (details.requested.group == 'org.jetbrains.kotlin' &&
+                    (details.requested.name == 'kotlin-stdlib-jdk7' ||
+                     details.requested.name == 'kotlin-stdlib-jdk8' ||
+                     details.requested.name == 'kotlin-stdlib-jre7' ||
+                     details.requested.name == 'kotlin-stdlib-jre8')) {
+                details.useTarget "org.jetbrains.kotlin:kotlin-stdlib:1.9.24"
+                details.because 'evita le classi duplicate di kotlin-stdlib'
+            }
+            if (details.requested.group == 'org.jetbrains.kotlin' &&
+                    details.requested.name == 'kotlin-stdlib') {
+                details.useVersion '1.9.24'
+            }
+        }
+    }
+}
+
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'androidx.webkit:webkit:1.11.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.activity:activity:1.8.2'
 }

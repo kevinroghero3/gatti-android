@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         web.setBackgroundColor(0xFFFFFFFF);
         web.setLongClickable(false);
         web.setHapticFeedbackEnabled(false);
-        // il gioco usa il clic destro/long press solo su desktop: qui disattivo la selezione
         web.setOnLongClickListener(v -> true);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
