@@ -14,13 +14,28 @@ android {
         versionName "1.0"
     }
 
+    signingConfigs {
+        release {
+            // I valori arrivano dalle variabili d'ambiente impostate dal workflow.
+            // Se mancano, l'APK di release resta non firmato (e NON sara' installabile).
+            if (System.getenv("KEYSTORE_FILE") != null) {
+                storeFile file(System.getenv("KEYSTORE_FILE"))
+                storePassword System.getenv("KEYSTORE_PASSWORD")
+                keyAlias System.getenv("KEY_ALIAS")
+                keyPassword System.getenv("KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         debug {
             minifyEnabled false
         }
         release {
             minifyEnabled false
-            // nessuna signingConfig: l'APK di release viene prodotto non firmato
+            if (System.getenv("KEYSTORE_FILE") != null) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 
